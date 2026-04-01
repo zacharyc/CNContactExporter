@@ -38,17 +38,21 @@ public final class ContactStore: ObservableObject {
             CNContactPhoneNumbersKey as CNKeyDescriptor,
             CNContactEmailAddressesKey as CNKeyDescriptor,
             CNContactPostalAddressesKey as CNKeyDescriptor,
-            CNContactBirthdayKey as CNKeyDescriptor,
-            CNContactNoteKey as CNKeyDescriptor
+            CNContactBirthdayKey as CNKeyDescriptor
+            // Note: CNContactNoteKey requires a special entitlement from Apple
         ]
 
         let request = CNContactFetchRequest(keysToFetch: keysToFetch)
-        var fetched: [ContactModel] = []
+        let store = self.store
 
         do {
-            try store.enumerateContacts(with: request) { cnContact, _ in
-                fetched.append(ContactModel(cnContact: cnContact))
-            }
+            let fetched: [ContactModel] = try await Task.detached {
+                var results: [ContactModel] = []
+                try store.enumerateContacts(with: request) { cnContact, _ in
+                    results.append(ContactModel(cnContact: cnContact))
+                }
+                return results
+            }.value
             contacts = fetched
         } catch {
             errorMessage = error.localizedDescription
@@ -83,7 +87,8 @@ extension ContactModel {
         } else {
             self.birthday = nil
         }
-        self.note = cnContact.note
+        // Note: Reading notes requires com.apple.developer.contacts.notes entitlement
+        self.note = ""
     }
 }
 #endif

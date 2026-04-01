@@ -2,8 +2,10 @@
 import SwiftUI
 
 /// The root view: shows a list of contacts and an export toolbar button.
-struct ContentView: View {
+public struct ContentView: View {
     @StateObject private var store = ContactStore()
+
+    public init() {}
     @State private var exportFormat: ExportFormatOption = .json
     @State private var exportedText: String = ""
     @State private var showingExport = false
@@ -11,7 +13,7 @@ struct ContentView: View {
 
     private let exporters: [ExportFormatOption] = ExportFormatOption.allCases
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             Group {
                 switch store.authorizationStatus {
@@ -203,7 +205,4 @@ enum ExportFormatOption: String, CaseIterable, Identifiable {
     }
 }
 
-#Preview {
-    ContentView()
-}
 #endif
