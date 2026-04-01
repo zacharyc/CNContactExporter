@@ -20,7 +20,8 @@ public struct ContentView: View {
                 case .notDetermined:
                     requestAccessView
                 case .authorized:
-                    contactListView
+//                    contactListView
+                    contactTableView
                 case .denied, .restricted:
                     accessDeniedView
                 @unknown default:
@@ -108,6 +109,14 @@ public struct ContentView: View {
             if store.contacts.isEmpty {
                 ContentUnavailableView("No Contacts", systemImage: "person.crop.circle")
             }
+        }
+    }
+
+    private var contactTableView: some View {
+        Table(store.contacts) {
+            TableColumn("Name", value: \.fullName)
+            TableColumn("Company", value: \.organizationName)
+//            TableColumn("email", value: \.emailAddresses.first ?? "")
         }
     }
 
