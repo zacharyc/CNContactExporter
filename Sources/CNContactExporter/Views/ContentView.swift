@@ -47,7 +47,7 @@ public struct ContentView: View {
             .sheet(isPresented: $showingExport) {
                 ExportPreviewView(
                     title: exportFormat.title,
-                    content: exportedText
+                    content: $exportedText
                 )
             }
             .alert("Export Error", isPresented: .constant(exportError != nil), actions: {
@@ -163,17 +163,15 @@ struct ContactRow: View {
 
 struct ExportPreviewView: View {
     let title: String
-    let content: String
+    @Binding var content: String
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                Text(content)
-                    .font(.system(.caption, design: .monospaced))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding()
-            }
+            TextEditor(text: .constant(content))
+                .font(Font.system(.caption, design: .monospaced))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
             .navigationTitle("Export – \(title)")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
