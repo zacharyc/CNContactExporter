@@ -116,6 +116,11 @@ public struct ContentView: View {
         Table(store.contacts) {
             TableColumn("Name", value: \.fullName)
             TableColumn("Company", value: \.organizationName)
+            TableColumn("Email") { item in
+                Text(item.emailAddresses.joined(separator: ", "))}
+            TableColumn("Phone") { item in
+                Text(item.phoneNumbers.joined(separator: ", "))
+            }
 //            TableColumn("email", value: \.emailAddresses.first ?? "")
         }
     }
