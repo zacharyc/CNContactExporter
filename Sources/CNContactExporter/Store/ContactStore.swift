@@ -32,14 +32,59 @@ public final class ContactStore: ObservableObject {
     /// Fetches all contacts from the system store.
     public func fetch() async {
         let keysToFetch: [CNKeyDescriptor] = [
+            CNContactNamePrefixKey as CNKeyDescriptor,
             CNContactGivenNameKey as CNKeyDescriptor,
+            CNContactMiddleNameKey as CNKeyDescriptor,
             CNContactFamilyNameKey as CNKeyDescriptor,
+            CNContactPreviousFamilyNameKey as CNKeyDescriptor,
+            CNContactNameSuffixKey as CNKeyDescriptor,
+            CNContactNicknameKey as CNKeyDescriptor,
+            CNContactPhoneticGivenNameKey as CNKeyDescriptor,
+            CNContactPhoneticMiddleNameKey as CNKeyDescriptor,
+            CNContactPhoneticFamilyNameKey as CNKeyDescriptor,
+
+            CNContactJobTitleKey as CNKeyDescriptor,
+            CNContactDepartmentNameKey as CNKeyDescriptor,
             CNContactOrganizationNameKey as CNKeyDescriptor,
-            CNContactPhoneNumbersKey as CNKeyDescriptor,
-            CNContactEmailAddressesKey as CNKeyDescriptor,
+            CNContactPhoneticOrganizationNameKey as CNKeyDescriptor,
+
             CNContactPostalAddressesKey as CNKeyDescriptor,
-            CNContactBirthdayKey as CNKeyDescriptor
-            // Note: CNContactNoteKey requires a special entitlement from Apple
+            CNContactEmailAddressesKey as CNKeyDescriptor,
+            CNContactUrlAddressesKey as CNKeyDescriptor,
+            CNContactInstantMessageAddressesKey as CNKeyDescriptor,
+
+            CNContactPhoneNumbersKey as CNKeyDescriptor,
+
+            CNContactSocialProfilesKey as CNKeyDescriptor,
+
+            CNContactBirthdayKey as CNKeyDescriptor,
+            CNContactNonGregorianBirthdayKey as CNKeyDescriptor,
+            CNContactDatesKey as CNKeyDescriptor,
+
+            // Contact Notes require a specific entitlement from Apple:
+            // https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.contacts.notes
+//            CNContactNoteKey as CNKeyDescriptor,
+
+            // Leaving out Images for now Because I need to figure out how we store that
+//            CNContactImageDataKey as CNKeyDescriptor,
+//            CNContactThumbnailImageDataKey as CNKeyDescriptor,
+//            CNContactImageDataAvailableKey as CNKeyDescriptor,
+
+            CNContactRelationsKey as CNKeyDescriptor,
+
+            CNGroupNameKey as CNKeyDescriptor,
+            CNGroupIdentifierKey as CNKeyDescriptor,
+            CNContainerNameKey as CNKeyDescriptor,
+            CNContainerTypeKey as CNKeyDescriptor,
+
+            CNInstantMessageAddressServiceKey as CNKeyDescriptor,
+            CNInstantMessageAddressUsernameKey as  CNKeyDescriptor,
+
+            CNSocialProfileServiceKey as CNKeyDescriptor,
+            CNSocialProfileURLStringKey as CNKeyDescriptor,
+            CNSocialProfileUsernameKey as CNKeyDescriptor,
+            CNSocialProfileUserIdentifierKey as CNKeyDescriptor,
+
         ]
 
         let request = CNContactFetchRequest(keysToFetch: keysToFetch)
