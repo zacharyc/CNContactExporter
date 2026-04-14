@@ -10,6 +10,7 @@ public struct ContentView: View {
     @State private var exportedText: String = ""
     @State private var showingExport = false
     @State private var exportError: String?
+    @State private var sortOrder = [KeyPathComparator(\ContactModel.fullName)]
 
     private let exporters: [ExportFormatOption] = ExportFormatOption.allCases
 
@@ -20,7 +21,6 @@ public struct ContentView: View {
                 case .notDetermined:
                     requestAccessView
                 case .authorized:
-//                    contactListView
                     contactTableView
                 case .denied, .restricted:
                     accessDeniedView
@@ -28,7 +28,7 @@ public struct ContentView: View {
                     accessDeniedView
                 }
             }
-            .navigationTitle("Contacts")
+            .navigationTitle("Contacts: (\(store.contacts.count))")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Menu {
@@ -113,7 +113,7 @@ public struct ContentView: View {
     }
 
     private var contactTableView: some View {
-        Table(store.contacts) {
+        Table(store.contacts.sorted(using: sortOrder), sortOrder: $sortOrder) {
             TableColumn("Name", value: \.fullName)
             TableColumn("Company", value: \.organizationName)
             TableColumn("Email") { item in
@@ -131,8 +131,10 @@ public struct ContentView: View {
         do {
             exportedText = try exportFormat.exporter.export(store.contacts)
             showingExport = true
+            print(exportedText.lengthOfBytes(using: .utf8))
         } catch {
             exportError = error.localizedDescription
+            print("Error with Export: \(error.localizedDescription)")
         }
     }
 }
